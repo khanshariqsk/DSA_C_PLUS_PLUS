@@ -1,0 +1,30 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "compile and run",
+      "type": "shell",
+      "command": "g++",
+      "args": [
+        "--std=c++17",
+        "-o",
+        "${fileBasenameNoExtension}.exe",
+        "${file}",
+        "&&",
+        "${fileBasenameNoExtension}.exe",
+        "<",
+        "input.txt",
+        ">",
+        "output.txt"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": []
+    }
+  ]
+}
