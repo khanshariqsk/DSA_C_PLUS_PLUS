@@ -695,48 +695,65 @@ void printPattern21(int n)
 // 6 6 6 6 6 6 6 6 6 6 6
 void printPattern22(int n)
 {
-    for (int i = 1; i <= n; i++)
+    // for (int i = 1; i <= n; i++)
+    // {
+    //     int size_copy = n;
+    //     for (int j = i - 1; j > 0; j--)
+    //     {
+    //         cout << size_copy << " ";
+    //         if (j != i)
+    //             size_copy--;
+    //     }
+
+    //     for (int j = 1; j <= 2 * (n - i); j++)
+    //     {
+    //         cout << n - i + 1 << " ";
+    //     }
+
+    //     for (int j = 1; j <= i; j++)
+    //     {
+    //         cout << size_copy << " ";
+    //         size_copy++;
+    //     }
+
+    //     cout << endl;
+    // }
+
+    // for (int i = 2; i <= n; i++)
+    // {
+    //     int size_copy = n;
+    //     for (int j = n - i; j > 0; j--)
+    //     {
+    //         cout << size_copy << " ";
+    //         size_copy--;
+    //     }
+
+    //     for (int j = 1; j <= 2 * i - 1; j++)
+    //     {
+    //         cout << i << " ";
+    //     }
+
+    //     for (int j = 1; j <= n - i; j++)
+    //     {
+    //         size_copy++;
+    //         cout << size_copy << " ";
+    //     }
+
+    //     cout << endl;
+    // }
+
+    // OR
+
+    for (int i = 0; i < 2 * n - 1; i++)
     {
-        int size_copy = n;
-        for (int j = i - 1; j > 0; j--)
+        for (int j = 0; j < 2 * n - 1; j++)
         {
-            cout << size_copy << " ";
-            if (j != i)
-                size_copy--;
-        }
+            int top = i;
+            int left = j;
+            int right = (2 * n - 2) - j;
+            int down = (2 * n - 2) - i;
 
-        for (int j = 1; j <= 2 * (n - i); j++)
-        {
-            cout << n - i + 1 << " ";
-        }
-
-        for (int j = 1; j <= i; j++)
-        {
-            cout << size_copy << " ";
-            size_copy++;
-        }
-
-        cout << endl;
-    }
-
-    for (int i = 2; i <= n; i++)
-    {
-        int size_copy = n;
-        for (int j = n - i; j > 0; j--)
-        {
-            cout << size_copy << " ";
-            size_copy--;
-        }
-
-        for (int j = 1; j <= 2 * i - 1; j++)
-        {
-            cout << i << " ";
-        }
-
-        for (int j = 1; j <= n - i; j++)
-        {
-            size_copy++;
-            cout << size_copy << " ";
+            cout << (n - min(min(top, down), min(left, right)));
         }
 
         cout << endl;
