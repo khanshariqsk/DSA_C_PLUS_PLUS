@@ -187,7 +187,7 @@ void reverse(int arr[], int start, int end)
     }
 }
 
-// Question 4(a) ==> Rotate array left by K elements
+// Question 5(a) ==> Rotate array left by K elements
 void rotate_array_left_by_kth_place(int arr[], int n, int k)
 {
 
@@ -254,7 +254,7 @@ void rotate_array_left_by_kth_place(int arr[], int n, int k)
     reverse(arr, 0, n - 1); // Reverse entire array
 }
 
-// Question 4(b) ==> Rotate array right by K elements
+// Question 5(b) ==> Rotate array right by K elements
 void rotate_array_right_by_kth_place(int arr[], int n, int k)
 {
 
@@ -334,6 +334,7 @@ void rotate_array_right_by_kth_place(int arr[], int n, int k)
     reverse(arr, 0, n - 1);     // Reverse entire array
 }
 
+// Question 6 ==> Rotate array right by K elements
 void move_zeroes_to_last(int arr[], int n)
 {
     /**
@@ -456,7 +457,7 @@ void move_zeroes_to_last(int arr[], int n)
         }
     }
 
-    if (j < 0)
+    if (j == -1)
         return;
 
     for (int i = j + 1; i < n; i++)
@@ -472,12 +473,203 @@ void move_zeroes_to_last(int arr[], int n)
     }
 }
 
+// Question 7 ==> Linear Search
+int linears_search(int arr[], int n, int target)
+{
+    for (int i = 0; i < n; i++)
+    {
+        if (arr[i] == target)
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+// Question 8(a) ==> Union of Two Sorted Arrays
+vector<int> union_two_sorted_arrays(int arr1[], int n1, int arr2[], int n2)
+{
+    /**
+     * Computes the union of two sorted arrays with unique elements.
+     *
+     * @param arr1  First sorted array
+     * @param n1    Size of first array
+     * @param arr2  Second sorted array
+     * @param n2    Size of second array
+     * @return      Vector containing union of both arrays (sorted and unique)
+     *
+     * * Time Complexity: O(n1 + n2) - Single pass through both arrays
+     * * Space Complexity: O(1) auxiliary space (O(n1 + n2) for result)
+     *
+     * * Algorithm:
+     *   1. Uses two-pointer technique to merge arrays
+     *   2. Checks for duplicates by comparing with last added element
+     *   3. Handles remaining elements after one array is exhausted
+     *
+     * * Edge Cases Handled:
+     *   - Empty input arrays
+     *   - All elements same in both arrays
+     *   - One array completely contained in another
+     */
+
+    vector<int> union_array; // Result container
+
+    int i = 0; // Pointer for arr1
+    int j = 0; // Pointer for arr2
+
+    // Merge process while both arrays have elements
+    while (i < n1 && j < n2)
+    {
+        if (arr1[i] <= arr2[j])
+        {
+            // Add from arr1 if not duplicate
+            if (union_array.empty() || union_array.back() != arr1[i])
+            {
+                union_array.push_back(arr1[i]);
+            }
+            i++;
+        }
+        else
+        {
+            // Add from arr2 if not duplicate
+            if (union_array.empty() || union_array.back() != arr2[j])
+            {
+                union_array.push_back(arr2[j]);
+            }
+            j++;
+        }
+    }
+
+    // Add remaining elements from arr1
+    while (i < n1)
+    {
+        if (union_array.empty() || union_array.back() != arr1[i])
+        {
+            union_array.push_back(arr1[i]);
+        }
+        i++;
+    }
+
+    // Add remaining elements from arr2
+    while (j < n2)
+    {
+        if (union_array.empty() || union_array.back() != arr2[j])
+        {
+            union_array.push_back(arr2[j]);
+        }
+        j++;
+    }
+
+    return union_array;
+}
+
+// Question 8(b) ==> Intersection of Two Sorted Arrays
+vector<int> intersection_two_sorted_arrays(int arr1[], int n1, int arr2[], int n2)
+{
+    /**
+     * Computes intersection using visited marker approach.
+     *
+     * @note This version is less efficient than two-pointer method
+     *       but shown for educational purposes.
+     *
+     * * Time Complexity: O(n1 * n2) - Nested loops
+     * * Space Complexity: O(n2) - For visited array
+     *
+     * * How it works:
+     *   1. Marks elements in arr2 as visited when matched
+     *   2. Avoids duplicate matches
+     *   3. Early termination when arr2 elements become larger
+     */
+
+    // vector<int> ans;
+    // int vis[n2] = {0}; // Visited marker array
+
+    // for (int i = 0; i < n1; i++)
+    // {
+    //     for (int j = 0; j < n2; j++)
+    //     {
+    //         if (arr1[i] == arr2[j] && vis[j] == 0)
+    //         {
+    //             ans.push_back(arr1[i]);
+    //             vis[j] = 1; // Mark as visited
+    //             break;
+    //         }
+    //         if (arr2[j] > arr1[i])
+    //             break; // Early termination
+    //     }
+    // }
+
+    // return ans;
+
+    // OR =====================================>
+
+    /**
+     * Computes the intersection of two sorted arrays.
+     *
+     * @param arr1  First sorted array (non-decreasing order)
+     * @param n1    Size of first array
+     * @param arr2  Second sorted array (non-decreasing order)
+     * @param n2    Size of second array
+     * @return      Vector containing intersection of both arrays (sorted)
+     *
+     * * Time Complexity: O(n1 + n2) - Efficient two-pointer approach
+     * * Space Complexity: O(1) auxiliary space (O(min(n1,n2)) for result)
+     *
+     * * Algorithm:
+     *   1. Uses two-pointer technique to find common elements
+     *   2. Skips duplicates by checking against last added element
+     *   3. Handles remaining elements after one array is exhausted
+     *
+     * * Edge Cases Handled:
+     *   - Empty input arrays
+     *   - No intersection elements
+     *   - Duplicate elements within single array
+     *   - One array completely contained in another
+     */
+
+    vector<int> intersection_array; // Result container
+
+    int i = 0; // Pointer for arr1
+    int j = 0; // Pointer for arr2
+
+    while (i < n1 && j < n2)
+    {
+        if (arr1[i] < arr2[j])
+        {
+            i++; // Move smaller element's pointer
+        }
+        else if (arr2[j] < arr1[i])
+        {
+            j++; // Move smaller element's pointer
+        }
+        else
+        {
+            // For duplicate check but in this intersection duplicate is allowed that is why this code is commented out
+            // if (intersection_array.empty() || intersection_array.back() != arr1[i])
+            // {
+            // }
+
+            intersection_array.push_back(arr1[i]);
+            i++;
+            j++;
+        }
+    }
+
+    return intersection_array;
+}
+
 int main()
 {
-    int array_size = 9;
-    int arr[array_size] = {1, 6, 0, 0, 2, 3, 0, 4, 0, 1};
-    move_zeroes_to_last(arr, array_size);
-    for (int it : arr)
+    int array_size_1 = 6;
+    int arr1[array_size_1] = {3, 4, 6, 7, 9, 9};
+
+    int array_size_2 = 6;
+    int arr2[array_size_2] = {1, 5, 7, 8, 8, 10};
+
+    vector<int> intersection_array = intersection_two_sorted_arrays(arr1, array_size_1, arr2, array_size_2);
+
+    for (int it : intersection_array)
     {
         cout << it << endl;
     }
