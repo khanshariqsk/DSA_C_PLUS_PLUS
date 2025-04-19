@@ -659,21 +659,294 @@ vector<int> intersection_two_sorted_arrays(int arr1[], int n1, int arr2[], int n
     return intersection_array;
 }
 
+int find_missing_number_in_array(int arr[], int n)
+{
+
+    /**
+     * Finds the missing number in a sequence by checking adjacent differences.
+     *
+     * @param arr  Input array (expected to contain numbers from 1 to n with one missing)
+     * @param n    Size of the array (n-1 elements, since one is missing)
+     *
+     * * Time Complexity: O(n)  (Single pass through array)
+     * * Space Complexity: O(1) (No extra space used)
+     *
+     * * How it works:
+     *   1. Checks if the difference between consecutive elements > 1.
+     *   2. If found, returns the missing number (current element + 1).
+     *   3. Handles edge cases where the missing number is at the start or end.
+     *
+     * * Edge Cases Handled:
+     *   - Missing number at the beginning (e.g., [2, 3, 4] → returns 1)
+     *   - Missing number at the end (e.g., [1, 2, 3] → returns 4)
+     *   - Missing number in the middle (e.g., [1, 3, 4] → returns 2)
+     */
+    // for (int i = 0; i < n - 2; i++)
+    // {
+    //     if (arr[i + 1] - arr[i] > 1)
+    //     {
+    //         return arr[i] + 1;
+    //     }
+    // }
+
+    // if (arr[n - 2] == n)
+    // { // Last element is n → missing is at start
+    //     return arr[0] - 1;
+    // }
+
+    // return arr[n - 2] + 1; // Default: missing is at end
+
+    // OR =====================================>
+    /**
+     * Finds the missing number using the sum of natural numbers formula.
+     *
+     * @param arr  Input array (expected to contain numbers from 1 to n with one missing)
+     * @param n    Size of the array (n-1 elements, since one is missing)
+     *
+     * * Time Complexity: O(n)  (Single pass to compute sum)
+     * * Space Complexity: O(1) (Constant extra space)
+     *
+     * * How it works:
+     *   1. Computes the expected sum of first n natural numbers: (n*(n+1))/2.
+     *   2. Computes the actual sum of array elements.
+     *   3. Returns the difference (expected - actual).
+     *
+     * * Edge Cases Handled:
+     *   - Works for any missing number in the range [1, n].
+     *
+     * * Limitations:
+     *   - Risk of integer overflow for large n (e.g., n > 10^5).
+     */
+
+    // int sum = (n * (n + 1)) / 2; // Expected sum of 1 to n
+    // int s2 = 0;
+    // for (int i = 0; i < n - 1; i++)
+    // { // Actual sum of array
+    //     s2 += arr[i];
+    // }
+    // int missingNum = sum - s2; // Missing number
+    // return missingNum;
+
+    // OR =====================================>
+    /**
+     * Finds the missing number using XOR properties.
+     *
+     * @param arr  Input array (expected to contain numbers from 1 to n with one missing)
+     * @param n    Size of the array (n-1 elements, since one is missing)
+     *
+     * * Time Complexity: O(n)  (Single pass through array)
+     * * Space Complexity: O(1) (Constant extra space)
+     *
+     * * How it works:
+     *   1. XOR all array elements (xor1).
+     *   2. XOR all numbers from 1 to n (xor2).
+     *   3. The missing number is xor1 ^ xor2 (XOR cancels out duplicates).
+     *
+     * * Advantages:
+     *   - No risk of integer overflow (unlike sum approach).
+     *   - Works for any unsorted sequence.
+     *
+     * * Edge Cases Handled:
+     *   - Works for any missing number in the range [1, n].
+     */
+
+    int xor1 = 0, xor2 = 0;
+    for (int i = 0; i < n - 1; i++)
+    {
+        xor1 ^= arr[i];  // XOR of array elements
+        xor2 ^= (i + 1); // XOR of 1 to n-1
+    }
+    xor2 ^= n;          // Include n in XOR
+    return xor1 ^ xor2; // Missing number
+}
+
+int maximum_consecutive_ones(int arr[], int n)
+{
+    /**
+     * Finds the maximum consecutive 1's by tracking positions of 0's.
+     *
+     * @param arr  Binary array (0's and 1's)
+     * @param n    Size of the array
+     *
+     * * Time Complexity: O(n)  (Two passes: one to find first 0, one to scan rest)
+     * * Space Complexity: O(1) (Uses only a few variables)
+     *
+     * * How it works:
+     *   1. Finds the first occurrence of 0 (j).
+     *   2. Tracks the distance between consecutive 0's to compute 1's sequences.
+     *   3. Updates max_count whenever a longer sequence is found.
+     *
+     * * Edge Cases Handled:
+     *   - All 1's: Returns n
+     *   - All 0's: Returns 0
+     *   - Single 0 in 1's: Returns max(left or right segment)
+     */
+
+    // int j = 0;
+    // // Find first 0 (if any)
+    // while (j < n)
+    // {
+    //     if (arr[j] == 0)
+    //         break;
+    //     j++;
+    // }
+    // int max_count = j; // Initialize with count of leading 1's
+
+    // // Scan remaining array
+    // for (int i = j; i < n; i++)
+    // {
+    //     if (arr[i] == 0)
+    //     {
+    //         // Update max_count with the length of 1's between j and i
+    //         max_count = max(max_count, i - j - 1);
+    //         j = i; // Move j to current 0
+    //     }
+    // }
+    // // Check trailing 1's after last 0
+    // max_count = max(max_count, n - j - 1);
+    // return max_count;
+
+    // OR
+
+    /**
+     * Finds the maximum consecutive 1's using a running counter.
+     *
+     * @param arr  Binary array (0's and 1's)
+     * @param n    Size of the array
+     *
+     * * Time Complexity: O(n)  (Single pass)
+     * * Space Complexity: O(1) (Uses only two variables)
+     *
+     * * How it works:
+     *   1. Increments `current` for every consecutive 1.
+     *   2. Resets `current` to 0 when a 0 is encountered.
+     *   3. Updates `max_count` whenever `current` exceeds it.
+     *
+     * * Advantages:
+     *   - Simpler and more intuitive.
+     *   - Single pass (more efficient in practice).
+     *
+     * * Edge Cases Handled:
+     *   - All 1's: Returns n
+     *   - All 0's: Returns 0
+     */
+
+    int max_count = 0, current = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (arr[i] == 1)
+        {
+            current++;
+            max_count = max(max_count, current);
+        }
+        else
+        {
+            current = 0; // Reset on 0
+        }
+    }
+    return max_count;
+}
+
+int number_appears_once(int arr[], int n)
+{
+    int num = 0;
+
+    for (int i = 0; i < n; i++)
+    {
+        num = num ^ arr[i];
+    }
+
+    return num;
+}
+
+int longest_subarray_with_sum_k(int arr[], int n, int k)
+{
+    // Brute force approach
+    // int longest = 0;
+
+    // for (int i = 0; i < n; i++)
+    // {
+    //     int sum = 0;
+    //     for (int j = i; j < n; j++)
+    //     {
+    //         sum += arr[j];
+
+    //         if (sum == k && j - i + 1 > longest)
+    //         {
+    //             longest = j - i + 1;
+    //         }
+    //     }
+    // }
+
+    // return longest;
+
+    // Better Approach (this solution is the optimal solution if the array contains negative numbers)
+    // unordered_map<long long, int> prefix_map;
+    // long long sum = 0;
+    // int max_len = 0;
+
+    // for (int i = 0; i < n; i++)
+    // {
+    //     sum += arr[i];
+
+    //     if (sum == k)
+    //     {
+    //         max_len = max(max_len, i + 1);
+    //     }
+
+    //     if (prefix_map.count(sum - k))
+    //     {
+    //         max_len = max(max_len, i - prefix_map[sum - k]);
+    //     }
+
+    //     // The below if condition is used to find the largest subarray because if we encounter zero at any later index, the subsequent sum will remain the same, which will eventually replace the previous index value with the latest one, thereby shrinking the max_len.for finding shortest subarray we dont need to add this condition eg for reference [2,0,0,3] k=3
+
+    //     if (!prefix_map.count(sum))
+    //     {
+    //         prefix_map[sum] = i;
+    //     }
+    // }
+
+    // return max_len;
+
+    // Optimal Approach (only works for positive and zero numbers)
+    int left = 0, right = 0;
+    long long sum = arr[0];
+    int maxLen = 0;
+
+    while (right < n)
+    {
+        while (left <= right && sum > k)
+        {
+            sum -= arr[left];
+            left++;
+        }
+        if (sum == k)
+        {
+            maxLen = max(maxLen, right - left + 1);
+        }
+        right++;
+        if (right < n)
+            sum += arr[right];
+    }
+
+    return maxLen;
+}
+
 int main()
 {
-    int array_size_1 = 6;
-    int arr1[array_size_1] = {3, 4, 6, 7, 9, 9};
+    int array_size = 10;
+    int arr[array_size] = {1, 2, 3, 1, 1, 1, 1, 4, 2, 3};
+    // int array_size = 5;
+    // int arr[array_size] = {1, 2, 1, 2, 1};
 
-    int array_size_2 = 6;
-    int arr2[array_size_2] = {1, 5, 7, 8, 8, 10};
+    int res = longest_subarray_with_sum_k(arr, array_size, 3);
 
-    vector<int> intersection_array = intersection_two_sorted_arrays(arr1, array_size_1, arr2, array_size_2);
+    cout << res << endl;
 
-    for (int it : intersection_array)
-    {
-        cout << it << endl;
-    }
-    return 0;
-
-    return 0;
+    // for (int it : intersection_array)
+    // {
+    //     cout << it << endl;
+    // }
+    return 0; 
 }
